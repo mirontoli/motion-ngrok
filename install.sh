@@ -8,6 +8,8 @@ fi
 if [ ! $(which motion) ]; then
     apt install motion -y
     mkdir /var/log/motion
+    # motion user looses its permissions for some reason
+    # "chown" step might be redundant can can be removed in the futures
     chown motion:motion /var/log/motion
     systemctl enable motion
     systemctl start motion

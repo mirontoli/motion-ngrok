@@ -18,3 +18,14 @@ I monitor my 3D Printer remotely. I have a Raspberry Pi 2 with a wifi dongle, a 
 Ngrok Service Setup was developed by [Vincent Hsu](https://github.com/vincenthsu)
 
 Ngrok architecture auto detection was contributed by [David Eleazar](https://github.com/elzdave).
+
+## More configuration
+
+After running `./install.sh` you are really good to go, you don't even need to reboot. Although you might want to finetune your settings:
+
+- camera settings in `/etc/motion/motion.conf` (e.g. `framerate`, `text_left` for camera name, `width`, `height`)
+- ngrok settings in `/opt/ngrok/ngrok.yml`
+
+## Uninstall
+
+Run `./uninstall.sh`to remove motion and ngrok and clean up.
