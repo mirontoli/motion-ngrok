@@ -5,13 +5,14 @@ if (( $EUID != 0 )); then
     exit 1
 fi
 
-apt install motion -y
-mkdir /var/log/motion
-chown motion:motion /var/log/motion
-systemctl enable motion
-systemctl start motion
-
-echo "Done installing motion"
+if [ ! $(which motion) ]; then
+    apt install motion -y
+    mkdir /var/log/motion
+    chown motion:motion /var/log/motion
+    systemctl enable motion
+    systemctl start motion
+    echo "Done installing motion"
+fi
 
 # determine system arch
 ARCH=
@@ -48,8 +49,12 @@ if [ -z "$1" ]; then
 fi
 
 if [ ! -e ngrok.service ]; then
-    git clone --depth=1 https://github.com/vincenthsu/systemd-ngrok.git
-    cd systemd-ngrok
+    echo "make sure you are in the directory with ngrok.service"
+    echo "if you don't have the motion-ngrok directory"
+    echo "run git clone https://github.com/mirontoli/motion-ngrok.git"
+    echo "then cd motion-ngrok"
+    echo "then ./install.sh ..."
+    exit 1
 fi
 
 cp ngrok.service /lib/systemd/system/
