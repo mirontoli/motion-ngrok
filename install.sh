@@ -1,5 +1,18 @@
 #!/usr/bin/env bash
 
+if (( $EUID != 0 )); then
+    echo "Please run as root"
+    exit 1
+fi
+
+apt install motion -y
+mkdir /var/log/motion
+chown motion:motion /var/log/motion
+systemctl enable motion
+systemctl start motion
+
+echo "Done installing motion"
+
 # determine system arch
 ARCH=
 if [ "$(uname -m)" == 'x86_64' ]
@@ -28,10 +41,6 @@ if [ ! $(which git) ]; then
     exit 1
 fi
 
-if (( $EUID != 0 )); then
-    echo "Please run as root"
-    exit 1
-fi
 
 if [ -z "$1" ]; then
     echo "./install.sh <your_authtoken>"
@@ -47,6 +56,8 @@ cp ngrok.service /lib/systemd/system/
 mkdir -p /opt/ngrok
 cp ngrok.yml /opt/ngrok
 sed -i "s/<add_your_token_here>/$1/g" /opt/ngrok/ngrok.yml
+sed -i "s/<add_your_domain_here>/$2/g" /opt/ngrok/ngrok.yml
+sed -i "s/username1:password1/$3/g" /opt/ngrok/ngrok.yml
 
 cd /opt/ngrok
 echo "Downloading ngrok for $ARCH . . ."
